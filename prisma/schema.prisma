@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int        @id @default(autoincrement())
+  email       String     @unique
+  password    String
+  accountType String
+  createdAt   DateTime   @default(now())
+
+  orders      Order[]
+  cartItems   CartItem[]
+}
+
+model Product {
+  id             Int         @id @default(autoincrement())
+  name_en        String
+  name_es        String
+  description_en String?
+  description_es String?
+  category       String?
+  price          Float
+  imageUrl       String?
+  createdAt      DateTime    @default(now())
+
+  orderItems     OrderItem[]
+  cartItems      CartItem[]
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int
+
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  totalAmount Float
+  createdAt   DateTime    @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderItems  OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model QuoteRequest {
+  id        Int      @id @default(autoincrement())
+  brandName String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
