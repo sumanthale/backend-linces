@@ -39,6 +39,8 @@ export const validateCreateProduct = [
     .withMessage('Invalid image URL'),
   (req, res, next) => {
     const errors = validationResult(req);
+    console.log(errors);
+    
     if (!errors.isEmpty()) {
       return sendError(
         res,

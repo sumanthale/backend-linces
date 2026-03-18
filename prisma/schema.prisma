@@ -8,29 +8,38 @@ datasource db {
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
-  email       String     @unique
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
   password    String
-  accountType String
-  createdAt   DateTime   @default(now())
+  accountType String   // admin | customer | brand
+  createdAt   DateTime @default(now())
 
   orders      Order[]
   cartItems   CartItem[]
+  quotes      QuoteRequest[]
+
+  @@index([email])
 }
 
 model Product {
-  id             Int         @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   name_en        String
   name_es        String
   description_en String?
   description_es String?
   category       String?
   price          Float
+  stock          Int      @default(0)
   imageUrl       String?
-  createdAt      DateTime    @default(now())
+  isDeleted      Boolean  @default(false)
+  createdAt      DateTime @default(now())
 
   orderItems     OrderItem[]
   cartItems      CartItem[]
+
+  @@index([category])
+  @@index([name_en])
+  @@index([isDeleted])
 }
 
 model CartItem {
@@ -46,13 +55,15 @@ model CartItem {
 }
 
 model Order {
-  id          Int         @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   userId      Int
   totalAmount Float
-  createdAt   DateTime    @default(now())
+  createdAt   DateTime @default(now())
 
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   orderItems  OrderItem[]
+
+  @@index([userId])
 }
 
 model OrderItem {
@@ -64,12 +75,27 @@ model OrderItem {
 
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([productId])
 }
 
 model QuoteRequest {
   id        Int      @id @default(autoincrement())
+
   brandName String
   email     String
   message   String
+
+  // NEW FIELDS
+  status    String
+  adminResponse String?
+
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }

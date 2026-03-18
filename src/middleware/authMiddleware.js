@@ -31,6 +31,7 @@ export const authMiddleware = (req, res, next) => {
 };
 
 export const adminMiddleware = (req, res, next) => {
+  
   if (req.user?.accountType !== 'admin') {
     logger.warn(`Unauthorized admin access attempt - User: ${req.user?.userId}`);
     return sendError(
@@ -41,4 +42,22 @@ export const adminMiddleware = (req, res, next) => {
     );
   }
   next();
+};
+export const isAdmin = (req, res, next) => {
+  try {
+    // assuming user is attached via JWT middleware
+    if (!req.user || req.user.accountType !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. Admin only.',
+      });
+    }
+
+    next();
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Authorization error',
+    });
+  }
 };

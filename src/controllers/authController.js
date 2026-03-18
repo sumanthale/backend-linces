@@ -7,6 +7,7 @@ export const register = async (req, res, next) => {
     const { email, password, accountType } = req.body;
     const result = await registerUser(email, password, accountType);
 
+    
     if (!result.success) {
       return sendError(
         res,
@@ -25,7 +26,9 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    
     const result = await loginUser(email, password);
+console.log(result);
 
     if (!result.success) {
       return sendError(

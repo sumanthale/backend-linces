@@ -4,12 +4,20 @@ import logger from '../utils/logger.js';
 export const getAllProducts = async (filters = {}) => {
   try {
     const { category, search, page = 1, limit = 20 } = filters;
-    const skip = (page - 1) * limit;
+
+    const pageNumber = Number(page) || 1;
+    const limitNumber = Number(limit) || 20;
+    const skip = (pageNumber - 1) * limitNumber;
 
     const where = {};
+
     if (category) {
-      where.category = category;
+      where.category = {
+        equals: category,
+        mode: 'insensitive',
+      };
     }
+
     if (search) {
       where.OR = [
         { name_en: { contains: search, mode: 'insensitive' } },
@@ -23,7 +31,7 @@ export const getAllProducts = async (filters = {}) => {
       prisma.product.findMany({
         where,
         skip,
-        take: limit,
+        take: limitNumber,
         orderBy: { createdAt: 'desc' },
       }),
       prisma.product.count({ where }),
@@ -33,10 +41,10 @@ export const getAllProducts = async (filters = {}) => {
       success: true,
       data: products,
       pagination: {
-        page,
-        limit,
+        page: pageNumber,
+        limit: limitNumber,
         total,
-        pages: Math.ceil(total / limit),
+        pages: Math.ceil(total / limitNumber),
       },
     };
   } catch (error) {

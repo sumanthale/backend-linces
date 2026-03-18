@@ -15,6 +15,7 @@ export const validateRegister = [
     .withMessage('Invalid account type. Must be customer, brand, or admin'),
   (req, res, next) => {
     const errors = validationResult(req);
+    
     if (!errors.isEmpty()) {
       return sendError(
         res,
