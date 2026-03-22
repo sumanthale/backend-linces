@@ -198,3 +198,12 @@
 {"level":"info","message":"Quote updated - ID: 1, Status: REJECTED","service":"lincesckf-api","timestamp":"2026-03-19 03:33:21"}
 {"level":"info","message":"Product created: 26 - Create New Product","service":"lincesckf-api","timestamp":"2026-03-19 03:34:36"}
 {"level":"info","message":"Product updated: 26","service":"lincesckf-api","timestamp":"2026-03-19 03:35:07"}
+{"level":"info","message":"User logged in: brand@test.com","service":"lincesckf-api","timestamp":"2026-03-22 18:02:40"}
+{"level":"info","message":"User logged in: customer@test.com","service":"lincesckf-api","timestamp":"2026-03-22 18:02:59"}
+{"level":"info","message":"Item added to cart - User: 2, Product: 2, Qty: 3","service":"lincesckf-api","timestamp":"2026-03-22 18:03:09"}
+{"level":"info","message":"Item added to cart - User: 2, Product: 2, Qty: 1","service":"lincesckf-api","timestamp":"2026-03-22 18:21:01"}
+{"level":"info","message":"Item added to cart - User: 2, Product: 4, Qty: 1","service":"lincesckf-api","timestamp":"2026-03-22 18:21:09"}
+{"level":"info","message":"User logged in: customer@test.com","service":"lincesckf-api","timestamp":"2026-03-22 18:21:33"}
+{"level":"info","message":"Order created - User: 2, Order: 1, Total: 575","service":"lincesckf-api","timestamp":"2026-03-22 18:22:21"}
+{"level":"info","message":"User logged in: customer@test.com","service":"lincesckf-api","timestamp":"2026-03-22 20:02:54"}
+{"level":"info","message":"Item added to cart - User: 2, Product: 5, Qty: 1","service":"lincesckf-api","timestamp":"2026-03-22 20:03:03"}

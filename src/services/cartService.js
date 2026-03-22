@@ -29,8 +29,7 @@ export const getCart = async (userId) => {
 export const addToCart = async (userId, productId, quantity) => {
   try {
     const product = await prisma.product.findUnique({
-      where: { id: productId },
-    });
+      where: { id: productId, isDeleted: false },    });
 
     if (!product) {
       return { success: false, error: 'PRODUCT_NOT_FOUND', message: 'Product not found' };

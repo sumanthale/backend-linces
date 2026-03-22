@@ -4,8 +4,8 @@ import { ERROR_CODES, HTTP_STATUS } from '../constants/errorCodes.js';
 
 export const register = async (req, res, next) => {
   try {
-    const { email, password, accountType } = req.body;
-    const result = await registerUser(email, password, accountType);
+    const { email, password, accountType,name } = req.body;
+    const result = await registerUser(email, password, accountType,name);
 
     
     if (!result.success) {

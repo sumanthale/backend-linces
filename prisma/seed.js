@@ -12,16 +12,19 @@ const users = [
     email: "admin@lincesckf.com",
     password: "admin123",
     accountType: "admin",
+    name: "Admin User",
   },
   {
     email: "customer@test.com",
     password: "password123",
     accountType: "customer",
+    name: "Customer User",
   },
   {
     email: "brand@test.com",
     password: "password123",
     accountType: "brand",
+    name: "Brand User",
   },
 ];
 

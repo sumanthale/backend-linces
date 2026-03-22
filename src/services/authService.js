@@ -3,7 +3,7 @@ import prisma from '../config/prisma.js';
 import { generateToken } from '../utils/jwt.js';
 import logger from '../utils/logger.js';
 
-export const registerUser = async (email, password, accountType) => {
+export const registerUser = async (email, password, accountType, name) => {
   try {
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -12,7 +12,7 @@ export const registerUser = async (email, password, accountType) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
-      data: { email, password: hashedPassword, accountType },
+      data: { email, password: hashedPassword, accountType, name },
     });
 
     const token = generateToken(user);
@@ -26,6 +26,7 @@ export const registerUser = async (email, password, accountType) => {
           id: user.id,
           email: user.email,
           accountType: user.accountType,
+          name: user.name,
         },
       },
     };
@@ -39,7 +40,6 @@ export const loginUser = async (email, password) => {
   
   try {
     const user = await prisma.user.findUnique({ where: { email } });
-    console.log(user);
     
     if (!user) {
       return { success: false, error: 'INVALID_CREDENTIALS', message: 'Invalid credentials' };
@@ -61,6 +61,7 @@ export const loginUser = async (email, password) => {
           id: user.id,
           email: user.email,
           accountType: user.accountType,
+          name: user.name,
         },
       },
     };
@@ -79,6 +80,7 @@ export const getUserProfile = async (userId) => {
         email: true,
         accountType: true,
         createdAt: true,
+        name: true,
       },
     });
 

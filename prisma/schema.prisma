@@ -13,6 +13,7 @@ model User {
   password    String
   accountType String   // admin | customer | brand
   createdAt   DateTime @default(now())
+  name        String  
 
   orders      Order[]
   cartItems   CartItem[]
