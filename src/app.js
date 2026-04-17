@@ -8,6 +8,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import quoteRoutes from './routes/quoteRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 
 import { errorHandler, notFoundHandler } from './middleware/errorMiddleware.js';
 import { sendSuccess } from './utils/response.js';
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
       cart: '/api/cart',
       orders: '/api/orders',
       quotes: '/api/quotes',
+      chat: '/api/chat',
     },
   }, 'Welcome to Linces\'CKF API');
 });
@@ -43,6 +45,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/quotes', quoteRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

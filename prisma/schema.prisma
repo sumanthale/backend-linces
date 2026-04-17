@@ -13,11 +13,14 @@ model User {
   password    String
   accountType String   // admin | customer | brand
   createdAt   DateTime @default(now())
-  name        String  
+  name        String
 
   orders      Order[]
   cartItems   CartItem[]
   quotes      QuoteRequest[]
+  chat        Chat?    @relation("UserChat")
+  adminChats  Chat[]   @relation("AdminChats")
+  sentMessages Message[]
 
   @@index([email])
 }
@@ -79,6 +82,33 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  adminId   Int
+  createdAt DateTime @default(now())
+
+  user      User     @relation("UserChat", fields: [userId], references: [id], onDelete: Cascade)
+  admin     User     @relation("AdminChats", fields: [adminId], references: [id], onDelete: Cascade)
+  messages  Message[]
+
+  @@index([adminId])
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  chatId    Int
+  senderId  Int
+  text      String
+  createdAt DateTime @default(now())
+
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([chatId])
+  @@index([senderId])
 }
 
 model QuoteRequest {
