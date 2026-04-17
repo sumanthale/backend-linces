@@ -1,9 +1,22 @@
+import http from 'http';
+import { Server } from 'socket.io';
 import app from './app.js';
 import prisma from './config/prisma.js';
+import { registerChatSocket } from './socket/chatSocket.js';
 
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, () => {
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
+
+registerChatSocket(io);
+
+server.listen(PORT, () => {
   console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║                                                          ║
@@ -19,6 +32,7 @@ const server = app.listen(PORT, () => {
 ║  - Cart:     /api/cart                                   ║
 ║  - Orders:   /api/orders                                 ║
 ║  - Quotes:   /api/quotes                                 ║
+║  - Chat:     /api/chat (REST + WebSocket)                ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
   `);
