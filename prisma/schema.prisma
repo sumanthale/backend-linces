@@ -34,7 +34,10 @@ model Product {
   category       String?
   price          Float
   stock          Int      @default(0)
-  imageUrl       String?
+  imageUrl       String?                  // primary image (kept for backwards compat)
+  images         String                 // gallery: ordered array of image URLs
+  sizes          String                 // e.g. ["XS","S","M","L","XL","XXL"]
+  colors         String                   // e.g. [{ "name": "Ivory", "hex": "#f5f0e8" }]
   isDeleted      Boolean  @default(false)
   createdAt      DateTime @default(now())
 
@@ -45,6 +48,7 @@ model Product {
   @@index([name_en])
   @@index([isDeleted])
 }
+
 
 model CartItem {
   id        Int     @id @default(autoincrement())

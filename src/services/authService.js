@@ -94,3 +94,59 @@ export const getUserProfile = async (userId) => {
     return { success: false, error: 'INTERNAL_ERROR', message: 'Failed to fetch user profile' };
   }
 };
+
+
+export const changeUserPassword = async (userId, currentPassword, newPassword) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return { success: false, error: 'USER_NOT_FOUND', message: 'User not found' };
+    }
+    
+    const isValidPassword = await bcrypt.compare(currentPassword, user.password);
+    if (!isValidPassword) {
+      return { success: false, error: 'INVALID_CURRENT_PASSWORD', message: 'Current password is incorrect' };
+    }
+    
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10); 
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedNewPassword },
+    });
+    
+    logger.info(`User changed password: ${user.email}`);
+    return { success: true, message: 'Password changed successfully' };
+  } catch (error) {
+    logger.error('Change password error:', error);
+    return { success: false, error: 'INTERNAL_ERROR', message: 'Failed to change password' };
+  }
+};
+
+
+
+export const updateUserProfile = async (userId, name) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return { success: false, error: 'USER_NOT_FOUND', message: 'User not found' };
+    }
+    
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { name },
+      select: {
+        id: true,
+        email: true,
+        accountType: true,
+        createdAt: true,
+        name: true,
+      },
+    });
+    
+    logger.info(`User updated profile: ${user.email}`);
+    return { success: true, data: updatedUser, message: 'Profile updated successfully' };
+  } catch (error) {
+    logger.error('Update profile error:', error);
+    return { success: false, error: 'INTERNAL_ERROR', message: 'Failed to update profile' };
+  }
+};
